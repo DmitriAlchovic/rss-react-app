@@ -1,0 +1,12 @@
+.home-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 20vw;
+  min-width: 30vw;
+}
+
+.loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
