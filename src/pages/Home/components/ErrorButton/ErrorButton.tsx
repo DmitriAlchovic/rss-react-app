@@ -1,11 +1,24 @@
 import { Component, ReactNode } from 'react';
 import './ErrorButton.css';
 
-export default class ErrorButton extends Component {
+interface ErrorButtonState {
+  hasError: boolean;
+}
+
+export default class ErrorButton extends Component<object, ErrorButtonState> {
+  constructor(props: object) {
+    super(props);
+    this.state = {
+      hasError: false,
+    };
+  }
   handleClick = () => {
-    throw new Error('This is test error');
+    this.setState({ hasError: true });
   };
   render(): ReactNode {
+    if (this.state.hasError) {
+      throw new Error('This is  a test error');
+    }
     return (
       <>
         <button className="error-button" onClick={this.handleClick}>
