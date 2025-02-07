@@ -1,16 +1,16 @@
-import { Component, ReactNode } from 'react';
+import { FC } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
-import Home from './pages/Home/Home';
 import './App.css';
+import Home from './pages/Home/Home';
 
-export default class App extends Component {
-  render(): ReactNode {
-    return (
-      <>
-        <ErrorBoundary>
-          <Home />
-        </ErrorBoundary>
-      </>
-    );
-  }
-}
+const App: FC = () => {
+  return (
+    <>
+      <ErrorBoundary>
+        <Home />
+      </ErrorBoundary>
+    </>
+  );
+};
+
+export default App;

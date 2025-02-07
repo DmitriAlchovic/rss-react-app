@@ -1,4 +1,4 @@
-import { Component, ReactNode } from 'react';
+import { FC, useState, SyntheticEvent, ChangeEvent } from 'react';
 import './Search.css';
 
 interface SearchProps {
@@ -7,47 +7,39 @@ interface SearchProps {
   fetchAllMonsters(searchQuery: string): void;
 }
 
-interface SearchState {
-  searchString: string;
-}
-export default class Search extends Component<SearchProps, SearchState> {
-  constructor(props: SearchProps) {
-    super(props);
-    this.state = {
-      searchString: this.props.searchQuery,
-    };
-  }
-
-  handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    this.setState({ searchString: value });
-  };
-  handelSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+const Search: FC<SearchProps> = ({
+  loading,
+  searchQuery,
+  fetchAllMonsters,
+}) => {
+  const [searchString, setSearchString] = useState(searchQuery);
+  const handelSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { searchString } = this.state;
-    this.props.fetchAllMonsters(searchString);
+    fetchAllMonsters(searchString);
   };
 
-  render(): ReactNode {
-    const { searchString } = this.state;
-    const { loading } = this.props;
-    return (
-      <>
-        <form className="search-form" onSubmit={this.handelSubmit}>
-          <input
-            className="search-input"
-            disabled={!loading}
-            type="text"
-            name="search"
-            value={searchString}
-            onChange={this.handleInputChange}
-            placeholder="Enter dnd 5e monster name"
-          />
-          <button className="search-button" disabled={!loading} type="submit">
-            Search
-          </button>
-        </form>
-      </>
-    );
-  }
-}
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchString(e.target.value);
+  };
+
+  return (
+    <>
+      <form className="search-form" onSubmit={handelSubmit}>
+        <input
+          className="search-input"
+          disabled={!loading}
+          type="text"
+          name="search"
+          value={searchString}
+          onChange={handleChange}
+          placeholder="Enter dnd 5e monster name"
+        />
+        <button className="search-button" disabled={!loading} type="submit">
+          Search
+        </button>
+      </form>
+    </>
+  );
+};
+
+export default Search;

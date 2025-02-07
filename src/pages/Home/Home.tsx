@@ -1,87 +1,67 @@
-import { Component, ReactNode } from 'react';
+import { useCallback, useEffect, useState, FC } from 'react';
 import Search from './components/Search/Search';
 import Table from './components/Table/Table';
 import ErrorButton from './components/ErrorButton/ErrorButton';
 import { getAll } from '../../api/monsters';
 import Loader from './components/Loader/Loader';
 import './Home.css';
+import { MonstersList } from '../../interfaces';
 
-interface MonsterArrayResponse {
-  index: string;
-  name: string;
-  url: string;
-}
+const Home: FC = () => {
+  const [searchQuery, setSearchQuery] = useState<string>(() => {
+    const storeSearchValue = localStorage.getItem('searchValue');
+    return storeSearchValue ? storeSearchValue : '';
+  });
+  const [monstersList, setMonstersList] = useState<MonstersList[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-interface MainPageProps {
-  searchQuery: string;
-  data: null | MonsterArrayResponse[];
-  error: string | null;
-  loading: boolean;
-}
-
-export default class Home extends Component<object, MainPageProps> {
-  constructor(props: object) {
-    super(props);
-    const searchValue = localStorage.getItem('searchValue');
-    this.state = {
-      searchQuery: searchValue ? searchValue : '',
-      data: null,
-      loading: false,
-      error: null,
-    };
-  }
-
-  componentDidMount(): void {
-    if (this.state.searchQuery) {
-      this.fetchAllMonsters(this.state.searchQuery);
-    }
-  }
-
-  fetchAllMonsters = async (query: string) => {
-    if (query) {
-      this.setState({ loading: true, error: null });
-      try {
-        const data = await getAll(query);
-        if (data) {
-          this.setState({ data, loading: false, searchQuery: query });
-          localStorage.setItem('searchValue', query);
-        }
-      } catch (error) {
-        this.setState({
-          error: error instanceof Error ? error.message : 'Error',
-          loading: false,
-        });
-      }
-    } else {
-      this.setState({ data: null, searchQuery: '' });
+  const fetchAllMonsters = useCallback(async (query: string) => {
+    if (!query) {
+      setMonstersList(null);
+      setSearchQuery('');
       localStorage.setItem('searchValue', '');
+      return;
     }
-  };
+    setLoading(true);
+    const data = await getAll(query);
+    if (data) {
+      setMonstersList(data);
+      setSearchQuery(query);
+      localStorage.setItem('searchValue', query);
+    }
+    setLoading(false);
+    return;
+  }, []);
 
-  render(): ReactNode {
-    const { searchQuery, data, loading } = this.state;
-    return (
-      <>
-        <div className="home-page-container">
-          <Search
-            loading
-            searchQuery={searchQuery}
-            fetchAllMonsters={this.fetchAllMonsters}
-          />
-          {loading ? (
-            <div className="loader-container">
-              <Loader />
-            </div>
-          ) : (
-            <div>
-              <Table monstersList={data} />
-            </div>
-          )}
-          <div>
-            <ErrorButton />
+  useEffect(() => {
+    if (searchQuery) {
+      fetchAllMonsters(searchQuery);
+    }
+  }, [fetchAllMonsters, searchQuery]);
+
+  return (
+    <>
+      <div className="home-page-container">
+        <Search
+          loading
+          searchQuery={searchQuery}
+          fetchAllMonsters={fetchAllMonsters}
+        />
+        {loading ? (
+          <div className="loader-container">
+            <Loader />
           </div>
+        ) : (
+          <div>
+            <Table monstersList={monstersList} />
+          </div>
+        )}
+        <div>
+          <ErrorButton />
         </div>
-      </>
-    );
-  }
-}
+      </div>
+    </>
+  );
+};
+
+export default Home;

@@ -1,15 +1,12 @@
-import { Component, ReactNode } from 'react';
+import { FC } from 'react';
 import './Loader.css';
 
-export default class Loader extends Component {
-  handleClick = () => {
-    throw new Error('this is test error');
-  };
-  render(): ReactNode {
-    return (
-      <>
-        <div className="loader"></div>
-      </>
-    );
-  }
-}
+const Loader: FC = () => {
+  return (
+    <>
+      <div className="loader"></div>
+    </>
+  );
+};
+
+export default Loader;
