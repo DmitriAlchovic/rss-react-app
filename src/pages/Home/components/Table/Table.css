@@ -1,0 +1,28 @@
+.table-container {
+    height: 500px;
+    overflow: scroll;
+    display: flex;
+    width: 300px;
+}
+.table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  overflow: scroll;
+}
+
+.table-data,
+.table-header {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.table-data:hover {
+  background-color: #f3f3f3;
+  cursor: pointer;
+}
+
+.table-row:nth-child(even) {
+  background-color: #dddddd;
+}
