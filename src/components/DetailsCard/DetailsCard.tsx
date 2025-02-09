@@ -37,7 +37,6 @@ const DetailsCard: FC = () => {
   return (
     <>
       <div>
-        <div onClick={handleClose} className="card-background"></div>
         <div className="card-container">
           <h2>Details</h2>
           {loading && <Loader />}

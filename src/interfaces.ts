@@ -5,6 +5,7 @@ export interface MonstersList {
 }
 
 export interface MonsterInfo {
+  id: string;
   alignment: string;
   challenge_rating: number;
   charisma: number;

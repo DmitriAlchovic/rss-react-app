@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
-import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import Layout from './components/Layout';
 import Home from './pages/Home/Home';
 import Error from './pages/Error/Error';
 import DetailsCard from './components/DetailsCard/DetailsCard';
+import './App.css';
 
 const App: FC = () => {
   return (

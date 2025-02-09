@@ -36,6 +36,7 @@ const Home: FC = () => {
       setSearchQuery(query);
       storage.setItem(query);
       navigate(`/${1}`);
+      console.log(location.pathname);
     }
     setLoading(false);
     return;

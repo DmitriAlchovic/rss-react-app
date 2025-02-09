@@ -1,14 +1,15 @@
 import { FC } from 'react';
 import { MonstersList } from '../../../../interfaces';
 import './Table.css';
-import { NavLink, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 interface TableProps {
   monstersList: MonstersList[] | null;
 }
 
 const Table: FC<TableProps> = ({ monstersList }) => {
-  const column = ['name', 'url'];
+  const column = ['name'];
+  const navigate = useNavigate();
   const { page } = useParams();
   const pageSize = 5;
   const pageNumber = page ? parseInt(page) : 0;
@@ -19,6 +20,10 @@ const Table: FC<TableProps> = ({ monstersList }) => {
       const id = urlSplit[urlSplit.length - 1];
       return { ...item, id };
     });
+
+  const handleClick = (id: string) => {
+    navigate(id);
+  };
   return (
     <>
       {monstersList?.length ? (
@@ -38,9 +43,13 @@ const Table: FC<TableProps> = ({ monstersList }) => {
                 page &&
                 monstersListWithId.map((row, index: number) => (
                   <tr key={index} className="table-row">
-                    <td className="table-data">{row.name}</td>
-                    <td className="table-data">
-                      <NavLink to={row.id}>details</NavLink>
+                    <td
+                      className="table-data"
+                      onClick={() => {
+                        handleClick(row.id);
+                      }}
+                    >
+                      {row.name}
                     </td>
                   </tr>
                 ))}
