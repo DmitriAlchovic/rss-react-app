@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { MonstersList } from '../../../../interfaces';
 import './Table.css';
+import { NavLink, useParams } from 'react-router';
 
 interface TableProps {
   monstersList: MonstersList[] | null;
@@ -8,6 +9,16 @@ interface TableProps {
 
 const Table: FC<TableProps> = ({ monstersList }) => {
   const column = ['name', 'url'];
+  const { page } = useParams();
+  const pageSize = 5;
+  const pageNumber = page ? parseInt(page) : 0;
+  const monstersListWithId = monstersList
+    ?.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
+    .map((item) => {
+      const urlSplit = item.url.split('/');
+      const id = urlSplit[urlSplit.length - 1];
+      return { ...item, id };
+    });
   return (
     <>
       {monstersList?.length ? (
@@ -23,12 +34,16 @@ const Table: FC<TableProps> = ({ monstersList }) => {
               </tr>
             </thead>
             <tbody>
-              {monstersList.map((row: MonstersList, index: number) => (
-                <tr key={index} className="table-row">
-                  <td className="table-data">{row.name}</td>
-                  <td className="table-data">{row.url}</td>
-                </tr>
-              ))}
+              {monstersListWithId &&
+                page &&
+                monstersListWithId.map((row, index: number) => (
+                  <tr key={index} className="table-row">
+                    <td className="table-data">{row.name}</td>
+                    <td className="table-data">
+                      <NavLink to={row.id}>details</NavLink>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

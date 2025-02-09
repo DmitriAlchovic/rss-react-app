@@ -1,0 +1,35 @@
+.card-container {
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 500px;
+    position: relative;
+}
+
+.card-img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.close-button {
+    position: absolute;;
+    top: 0;
+    right: 0;
+    background-color:transparent;
+}
+
+.info-container {
+    position: relative;
+    height: fit-content;
+}
+
+.card-background {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+}
